@@ -1,0 +1,17 @@
+def getImages(block):
+    stimNames = open(_thisDir + os.sep + 'test1stim.csv', 'rU')
+    stimReader = csv.reader(stimNames, delimiter=',', dialect=csv.excel_tab)
+    imgs = []
+    for row in stimReader:
+        imgs.append(row[block])
+    imgs = imgs[1:]
+    imgs = [x for x in imgs if x]
+    random.shuffle(imgs)
+    return imgs[:5]
+
+def counterbalance():
+    order = [1, 2, 3, 4]
+    random.shuffle(order)
+    return order
+
+blockOrder = counterbalance()

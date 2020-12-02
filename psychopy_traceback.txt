@@ -1,0 +1,22 @@
+Traceback (most recent call last):
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/jedi/cache.py”, line 109, in wrapper
+KeyError: ((), frozenset())
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File “parso/grammar.pyc”, line 246, in load_grammar
+KeyError: ‘/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python36.zip/parso/python/grammar36.txt’
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/wx/core.py”, line 3383, in <lambda>
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/psychopy/app/coder/coder.py”, line 847, in ShowCalltip
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/jedi/api/__init__.py”, line 185, in __init__
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/jedi/inference/__init__.py”, line 91, in __init__
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/jedi/cache.py”, line 111, in wrapper
+  File “/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python3.6/jedi/api/environment.py”, line 37, in get_grammar
+  File “parso/grammar.pyc”, line 260, in load_grammar
+  File “parso/grammar.pyc”, line 249, in load_grammar
+NotADirectoryError: [Errno 20] Not a directory: ‘/Volumes/PsychoPy-2020.2.4/PsychoPy.app/Contents/Resources/lib/python36.zip/parso/python/grammar36.txt’
