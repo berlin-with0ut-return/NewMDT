@@ -40,6 +40,7 @@ event.waitKeys()
 # INTRO INSTRUCTIONS
 instr1 = visual.TextStim(win, text=
 """In this session, your task is to answer if the object is OLD or NEW.
+
 OLD means it was presented in the study session. 
 NEW means it was NOT presented in the study session.
 
@@ -50,8 +51,10 @@ win.flip()
 event.waitKeys(keyList=['space'])
 
 instr2 = visual.TextStim(win, text=
-"""Some of the objects may be similar to OLD objects, but are not exactly the same.
-If the picture is exactly the same, then it is OLD.
+"""Some objects may be similar to OLD objects, but are not exactly the same.
+
+If the object is exactly the same as the one in the study session, it is OLD.
+
 If there is a change in any feature of the object (color, orientation, quantity, etc) the picture is NEW.
 
 Press SPACE when you are ready to begin.
@@ -112,7 +115,7 @@ def getImages(block):
     imgs = imgs[1:]
     imgs = [x for x in imgs if x]
     random.shuffle(imgs)
-    return imgs[:3]
+    return imgs
 
 def counterbalance():
     order = [1, 2, 3, 4]
@@ -183,7 +186,6 @@ win.flip()
 event.waitKeys()
 
 dataFile.close()
-
 ## ANALYSIS
 
 data = pd.read_csv(filename)
@@ -380,3 +382,5 @@ output_tbl.loc['novel_miss'] = novel_res[1]
 # In[124]:
 
 output_tbl.to_csv(filename[:-8] + 'RESULTS.csv')
+
+core.quit()
