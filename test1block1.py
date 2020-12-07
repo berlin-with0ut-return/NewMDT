@@ -98,7 +98,7 @@ event.waitKeys(keyList=['space'])
 keyboardImg = visual.ImageStim(win=win, image="MDT test Keyboard.png", units='pix')
 keyboardImg.draw()
 win.flip()
-core.wait(4)
+core.wait(3)
 
 img = visual.ImageStim(win=win, image=None)
 answerKeysImg = visual.ImageStim(win=win, image="MDT Keyboard Instr.png")
@@ -165,7 +165,7 @@ def runTrial(blockImgs):
     breakInstr = visual.TextStim(win, text="Now we will take a short break for 5 seconds.", color=(-1,-1,-1), alignText='center')
     breakInstr.draw()
     win.flip()
-    core.wait(6)
+    core.wait(5)
 
 for blk in range(len(blockOrder)):
     blockImgs = getImages(blockOrder[blk])
@@ -187,21 +187,6 @@ event.waitKeys()
 
 dataFile.close()
 ## ANALYSIS
-
-data = pd.read_csv(filename)
-
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[66]:
-
-
-import pandas as pd
-import numpy as np
-
-
-# In[67]:
-
 
 data = pd.read_csv(filename)
 
