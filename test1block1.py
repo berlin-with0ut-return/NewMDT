@@ -337,10 +337,10 @@ def compute_rows(tbl):
     num_hc_miss = sum(misses['confidence'])
     num_lc_miss = num_misses - num_hc_miss
     # confidence percents
-    pct_hc_hit = num_hc_hit/num_hits
-    pct_lc_hit = num_lc_hit/num_hits
-    pct_hc_miss = num_hc_miss/num_misses
-    pct_lc_miss = num_lc_miss/num_misses
+    pct_hc_hit = num_hc_hit/num_hits if num_hits else None
+    pct_lc_hit = num_lc_hit/num_hits if num_hits else None
+    pct_hc_miss = num_hc_miss/num_misses if num_misses else None
+    pct_lc_miss = num_lc_miss/num_misses if num_misses else None
     return [[num_hits, pct_hits, num_hc_hit, num_lc_hit, pct_hc_hit, pct_lc_hit], 
            [num_misses, pct_misses, num_hc_miss, num_lc_miss, pct_hc_miss, pct_lc_miss]]
 
