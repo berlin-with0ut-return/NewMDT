@@ -31,11 +31,11 @@ expInfo['date'] = data.getDateStr()
 filename = _thisDir + os.sep + u'data/%s_%s_%s' % (expInfo['participant'], expName, expInfo['date'])
 filename = filename + '_V{0}.csv'.format(expInfo['version'])
 dataFile = open(filename, 'w')
-dataWriter = csv.writer(dataFile, delimiter=',')
+dataWriter = csv.writer(dataFile, delimiter=',', lineterminator = '\n')
 dataWriter.writerow(['img', 'earlyResp', 'earlyRespLatency', 'resp', 'latency'])
 
 # INTRO
-win = visual.Window([800,600], monitor="testMonitor", units="pix", color= (1,1,1))
+win = visual.Window([800,600], fullscr=True, monitor="testMonitor", color= (1,1,1))
 intro = visual.TextStim(win, text=
 """Welcome to the first section. Please press any key when you are ready to begin.
 """,
@@ -62,20 +62,19 @@ event.waitKeys(keyList=['space'])
 practiceStart = visual.TextStim(win, text="PRACTICE ROUND", color=(-1,-1,-1), alignText='center')
 practiceStart.draw()
 win.flip()
-core.wait(5)
+core.wait(3)
 
-practInstr1_1 = visual.TextStim(win, text="In this round, you will be answering the question:", 
-    color=(-1,-1,-1), alignText='center', pos=(0,100))
-practInstr1_2 = visual.TextStim(win, text="Would this item fit inside a lady's shoebox?", 
-    font='Arial', color=(-1,-1,-1), alignText='center', bold=True, pos=(0,50), height=20, units='pix')
-practInstr1_3 = visual.TextStim(win, text=
-"""It does not matter what kind of shoebox you imagine as long as you stay consistent.
+practInstr = visual.TextStim(win, text=
+"""In this round, you will be answering the question:
+
+Would this item fit inside a lady's shoebox?
+
+It does not matter what kind of shoebox you imagine as long as you stay consistent.
 
 Press SPACE to continue.
-""", color=(-1,-1,-1), alignText='center', pos=(0,-50))
-practInstr1_1.draw()
-practInstr1_2.draw()
-practInstr1_3.draw()
+""", 
+    color=(-1,-1,-1), alignText='center')
+practInstr.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
@@ -91,7 +90,7 @@ win.flip()
 event.waitKeys(keyList=['space'])
 
 PRACTICE_IMGS = ['001a.jpg', '013a.jpg', '005a.jpg', '002a.jpg']
-practiceTrials = data.TrialHandler([{'i': i} for i in range(4)], 1, method='random')
+practiceTrials = data.TrialHandler([{'i': i} for i in range(len(PRACTICE_IMGS))], 1, method='random')
 img = visual.ImageStim(win=win, image=None, units = "pix")
 waitGo = visual.TextStim(win=win, text=None, alignText='center')
 for trial in practiceTrials:
@@ -128,7 +127,7 @@ for trial in practiceTrials:
 random.shuffle(imgNames)
 
 # variable number
-NUM_IMAGES = 5
+NUM_IMAGES = 30
 beforeBreak = imgNames[:NUM_IMAGES]
 afterBreak = imgNames[NUM_IMAGES:2*NUM_IMAGES]
 
@@ -139,21 +138,19 @@ img = visual.ImageStim(win=win, image=None, units = "pix")
 part1Start = visual.TextStim(win, text="PART 1", color=(-1,-1,-1), alignText='center')
 part1Start.draw()
 win.flip()
-core.wait(5)
+core.wait(3)
 
 # FIRST 30 IMAGES
-shoeBoxInstr1 = visual.TextStim(win, text="In this round, you will be answering the question:", 
-    color=(-1,-1,-1), alignText='center', pos=(0,100))
-shoeBoxInstr2 = visual.TextStim(win, text="Would this item fit inside a lady's shoebox?", 
-    font='Arial', color=(-1,-1,-1), alignText='center', bold=True, pos=(0,50), height=20, units='pix')
-shoeBoxInstr3 = visual.TextStim(win, text=
-"""It does not matter what kind of shoebox you imagine as long as you stay consistent.
+shoeBoxInstr = visual.TextStim(win, color=(-1,-1,-1), alignText='center', text= 
+"""In this round, you will be answering the question:
+
+Would this item fit inside a lady's shoebox?
+
+It does not matter what kind of shoebox you imagine as long as you stay consistent.
 
 Press SPACE to continue.
-""", color=(-1,-1,-1), alignText='center', pos=(0,-50))
-shoeBoxInstr1.draw()
-shoeBoxInstr2.draw()
-shoeBoxInstr3.draw()
+""")
+shoeBoxInstr.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
@@ -195,23 +192,23 @@ for i in range(NUM_IMAGES):
 breakInstr = visual.TextStim(win, text="Now we will take a short break for 5 seconds.", color=(-1,-1,-1), alignText='center');
 breakInstr.draw()
 win.flip()
-core.wait(6)
+core.wait(5)
 
 # LAST 30 IMAGES
-remindAfterBreak1 = visual.TextStim(win, text="Remember, you are answering the question:", 
-    color=(-1,-1,-1), alignText='center', pos=(0,70))
-remindAfterBreak2 = visual.TextStim(win, text="Would this item fit inside a lady's shoebox?", 
-    font='Arial', color=(-1,-1,-1), alignText='center', bold=True, pos=(0,30), height=20, units='pix')
-remindAfterBreak3 = visual.TextStim(win, text="Press SPACE to resume the trial.", color=(-1,-1,-1), alignText='center', pos=(0,-30))
-remindAfterBreak1.draw()
-remindAfterBreak2.draw()
-remindAfterBreak3.draw()
+remindAfterBreak = visual.TextStim(win, text=
+"""Remember, you are answering the question:
+    
+Would this item fit inside a lady's shoebox?
+    
+Press SPACE to resume the trial.
+""", 
+    color=(-1,-1,-1), alignText='center')
+remindAfterBreak.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
 for i in range(NUM_IMAGES):
     # show the image
-    print(i)
     imgFile = "imgs{0}/".format(expInfo['version']) + afterBreak[i]
     img.setImage(imgFile)
     img.draw()
@@ -248,7 +245,7 @@ for i in range(NUM_IMAGES):
 breakBtwnSections = visual.TextStim(win, text="Now we will take a longer break for 10 seconds.", color=(-1,-1,-1), alignText='center');
 breakBtwnSections.draw()
 win.flip()
-core.wait(11)
+core.wait(10)
 
 ####################
 ## BLOCK 2: CARRY ##
@@ -263,26 +260,25 @@ afterBreak = imgNames[NUM_IMAGES:2*NUM_IMAGES]
 
 trials = data.TrialHandler([{'i': i} for i in range(NUM_IMAGES)], 1, method='sequential')
 
-img = visual.ImageStim(win=win, image=None, units="pix")
+img = visual.ImageStim(win=win, image=None)
 
 part2Start = visual.TextStim(win, text="PART 2", color=(-1,-1,-1), alignText='center')
 part2Start.draw()
 win.flip()
-core.wait(5)
+core.wait(3)
 
 # FIRST 30 IMAGES
-carryInstr1 = visual.TextStim(win, text="In this round, you will be answering a new question:", 
-    color=(-1,-1,-1), alignText='center', pos=(0,100))
-carryInstr2 = visual.TextStim(win, text="Can you pick up the object with one hand and carry it across the room?", 
-    font='Arial', color=(-1,-1,-1), alignText='center', bold=True, pos=(0,50), height=20, units='pix')
-carryInstr3 = visual.TextStim(win, text=
-"""Remember to press Y for yes and N for no.
-
-Press SPACE to when you are ready to begin.
-""", color=(-1,-1,-1), alignText='center', pos=(0,-50))
-carryInstr1.draw()
-carryInstr2.draw()
-carryInstr3.draw()
+carryInstr = visual.TextStim(win, text=
+"""In this round, you will be answering a new question:
+    
+Can you pick up the object with one hand and carry it across the room?
+    
+Remember to press Y for yes and N for no.
+    
+Press SPACE when you are ready to begin.
+""", 
+    color=(-1,-1,-1), alignText='center')
+carryInstr.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
@@ -324,21 +320,20 @@ for i in range(NUM_IMAGES):
 breakInstr = visual.TextStim(win, text="Now we will take a short break for 5 seconds.", color=(-1,-1,-1), alignText='center');
 breakInstr.draw()
 win.flip()
-core.wait(6)
+core.wait(5)
 
 # LAST 30 IMAGES
-remindAfterBreak1 = visual.TextStim(win, text="Remember, you are answering the question:", 
-    color=(-1,-1,-1), alignText='center', pos=(0,100))
-remindAfterBreak2 = visual.TextStim(win, text="Can you pick up the object with one hand and carry it across the room?", 
-    font='Arial', color=(-1,-1,-1), alignText='center', bold=True, pos=(0,50), height=20, units='pix')
-remindAfterBreak3 = visual.TextStim(win, text=
-"""Remember to press Y for yes and N for no.
+remindAfterBreak = visual.TextStim(win, text=
+"""Remember, you are answering the question:
+    
+Can you pick up the object with one hand and carry it across the room?
+    
+Remember to press Y for yes and N for no.
 
 Press SPACE to when you are ready to begin.
-""", color=(-1,-1,-1), alignText='center', pos=(0,-30))
-remindAfterBreak1.draw()
-remindAfterBreak2.draw()
-remindAfterBreak3.draw()
+    """, 
+    color=(-1,-1,-1), alignText='center')
+remindAfterBreak.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
 
