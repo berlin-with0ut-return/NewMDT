@@ -1,0 +1,4 @@
+trial,img,earlyResp,earlyLatency,resp,latency,lateResp,lateLatency
+0,126b.jpg,4,0.5650448000014876,4,1.4989650000061374,,
+1,134b.jpg,,,3,0.7761252999989665,,
+2,068a.jpg,,,3,0.4677139999985229,,

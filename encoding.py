@@ -9,7 +9,6 @@ import os
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
-
 # INTRO DIALOG BOX
 expInfo = {'participant': '', 'session': '001', 'version': 1}
 infoDlg = gui.DlgFromDict(dictionary=expInfo,
