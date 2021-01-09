@@ -24,6 +24,10 @@ imgNames = []
 for row in stimReader:
     imgNames.append(row[0])
 
+# define keys for input
+YES_KEY = 'f'
+NO_KEY = 'j'
+
 # opens file for data writing
 expName = "MDT_ENCODING"
 expInfo['date'] = data.getDateStr()
@@ -79,11 +83,12 @@ event.waitKeys(keyList=['space'])
 
 practInstr2 = visual.TextStim(win, text=
 """The image will be shown first, then an answer screen.
-When prompted, please press Y for yes and N for no.
+When prompted, please press {0} for yes and {1} for no.
 Only answer when you see the ANSWER screen, not the image itself.
 
 Press SPACE to continue.
-""", color=(-1,-1,-1), alignText='center')
+""".format(YES_KEY.upper(), NO_KEY.upper()), 
+    color=(-1,-1,-1), alignText='center')
 practInstr2.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
@@ -107,14 +112,14 @@ for trial in practiceTrials:
     """
     ANSWER: 
 
-    Y - yes
-    N - no
+    {0} - yes
+    {1} - no
 
-    """)
+    """.format(YES_KEY.upper(), NO_KEY.upper()))
     waitGo.setPos((0, 0))
     waitGo.draw()
     win.flip()
-    resp = event.waitKeys(keyList=['y', 'n', 'q'])
+    resp = event.waitKeys(keyList=[YES_KEY, NO_KEY, 'q'])
     if resp[0] == 'q':
         core.quit()
         break
@@ -164,7 +169,7 @@ for i in range(NUM_IMAGES):
     earlyResp = None
     earlyRespTime = None
     while timer.getTime() <= 2:
-        testResp = event.getKeys(keyList=['y','n'])
+        testResp = event.getKeys(keyList=[YES_KEY, NO_KEY])
         if testResp:
            earlyRespTime = timer.getTime()
            earlyResp = testResp[0]
@@ -174,14 +179,14 @@ for i in range(NUM_IMAGES):
     """
     ANSWER: 
 
-    Y - yes
-    N - no
+    {0} - yes
+    {1} - no
 
-    """)
+    """.format(YES_KEY.upper(), NO_KEY.upper()))
     waitGo.setPos((0, 0))
     waitGo.draw()
     win.flip()
-    resp = event.waitKeys(keyList=['y', 'n', 'q'])
+    resp = event.waitKeys(keyList=[YES_KEY, NO_KEY, 'q'])
     if resp[0] == 'q':
         core.quit()
         break
@@ -217,7 +222,7 @@ for i in range(NUM_IMAGES):
     earlyResp = None
     earlyRespTime = None
     while timer.getTime() <= 2:
-        testResp = event.getKeys(keyList=['y','n'])
+        testResp = event.getKeys(keyList=[YES_KEY, NO_KEY])
         if testResp:
            earlyRespTime = timer.getTime()
            earlyResp = testResp[0]
@@ -227,14 +232,14 @@ for i in range(NUM_IMAGES):
     """
     ANSWER: 
 
-    Y - yes
-    N - no
+    {0} - yes
+    {1} - no
 
-    """)
+    """.format(YES_KEY.upper(), NO_KEY.upper()))
     waitGo.setPos((0, 0))
     waitGo.draw()
     win.flip()
-    resp = event.waitKeys(keyList=['y', 'n', 'q'])
+    resp = event.waitKeys(keyList=[YES_KEY, NO_KEY, 'q'])
     if resp[0] == 'q':
         core.quit()
         break
@@ -272,10 +277,10 @@ carryInstr = visual.TextStim(win, text=
     
 Can you pick up the object with one hand and carry it across the room?
     
-Remember to press Y for yes and N for no.
+Remember to press {0} for yes and {1} for no.
     
 Press SPACE when you are ready to begin.
-""", 
+""".format(YES_KEY.upper(), NO_KEY.upper()), 
     color=(-1,-1,-1), alignText='center')
 carryInstr.draw()
 win.flip()
@@ -292,7 +297,7 @@ for i in range(NUM_IMAGES):
     earlyResp = None
     earlyRespTime = None
     while timer.getTime() <= 2:
-        testResp = event.getKeys(keyList=['y','n'])
+        testResp = event.getKeys(keyList=[YES_KEY, NO_KEY])
         if testResp:
            earlyRespTime = timer.getTime()
            earlyResp = testResp[0]
@@ -302,14 +307,14 @@ for i in range(NUM_IMAGES):
     """
     ANSWER: 
 
-    Y - yes
-    N - no
+    {0} - yes
+    {1} - no
 
-    """)
+    """.format(YES_KEY.upper(), NO_KEY.upper()))
     waitGo.setPos((0, 0))
     waitGo.draw()
     win.flip()
-    resp = event.waitKeys(keyList=['y', 'n', 'q'])
+    resp = event.waitKeys(keyList=[YES_KEY, NO_KEY, 'q'])
     if resp[0] == 'q':
         core.quit()
         break
@@ -327,10 +332,10 @@ remindAfterBreak = visual.TextStim(win, text=
     
 Can you pick up the object with one hand and carry it across the room?
     
-Remember to press Y for yes and N for no.
+Remember to press {0} for yes and {1} for no.
 
 Press SPACE to when you are ready to begin.
-    """, 
+    """.format(YES_KEY.upper(), NO_KEY.upper()), 
     color=(-1,-1,-1), alignText='center')
 remindAfterBreak.draw()
 win.flip()
@@ -349,7 +354,7 @@ for i in range(NUM_IMAGES):
     earlyResp = None
     earlyRespTime = None
     while timer.getTime() <= 2:
-        testResp = event.getKeys(keyList=['y','n'])
+        testResp = event.getKeys(keyList=[YES_KEY, NO_KEY])
         if testResp:
            earlyRespTime = timer.getTime()
            earlyResp = testResp[0]
@@ -359,14 +364,14 @@ for i in range(NUM_IMAGES):
     """
     ANSWER: 
 
-    Y - yes
-    N - no
+    {0} - yes
+    {1} - no
 
-    """)
+    """.format(YES_KEY.upper(), NO_KEY.upper()))
     waitGo.setPos((0, 0))
     waitGo.draw()
     win.flip()
-    resp = event.waitKeys(keyList=['y', 'n', 'q'])
+    resp = event.waitKeys(keyList=[YES_KEY, NO_KEY, 'q'])
     if resp[0] == 'q':
         core.quit()
         break

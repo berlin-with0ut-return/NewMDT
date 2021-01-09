@@ -11,6 +11,12 @@ import numpy as np
 _thisDir = os.path.dirname(os.path.abspath(__file__))
 os.chdir(_thisDir)
 
+# define keys
+DEF_OLD = 'd'
+MAYBE_OLD = 'f'
+MAYBE_NEW = 'j'
+DEF_NEW = 'k'
+
 # INTRO DIALOG BOX
 expInfo = {'participant': '', 'session': '001', 'version': 1}
 infoDlg = gui.DlgFromDict(dictionary=expInfo,
@@ -83,14 +89,14 @@ win.flip()
 event.waitKeys(keyList=['space'])
 
 practiceInstr = visual.TextStim(win, text=
-"""To answer, use the keys 1, 2, 3, and 4.
-1 - definitely NEW
-2 - maybe NEW
-3 - maybe OLD
-4 - definitely OLD
+"""To answer, use the keys {0}, {1}, {2}, and {3}.
+{0} - definitely NEW
+{1} - maybe NEW
+{2} - maybe OLD
+{3} - definitely OLD
 
 Press SPACE to begin the trial.
-""", color=(-1,-1,-1), alignText='center')
+""".format(DEF_OLD, MAYBE_OLD, MAYBE_NEW, DEF_NEW), color=(-1,-1,-1), alignText='center')
 practiceInstr.draw()
 win.flip()
 event.waitKeys(keyList=['space'])
@@ -124,7 +130,7 @@ def counterbalance():
 
 blockOrder = counterbalance()
 
-def runTrial(blockImgs):
+def runTrial(blockImgs, showBreak):
     for i in range(len(blockImgs)):
         imgFile = "imgs{0}/".format(expInfo['version']) + blockImgs[i]
         img.setImage(imgFile)
@@ -134,7 +140,7 @@ def runTrial(blockImgs):
         earlyResp = None
         earlyLatency = None
         while timer.getTime() <= 2:
-            checkResp = event.getKeys(keyList=['1','2','3','4'])
+            checkResp = event.getKeys(keyList=[DEF_OLD, MAYBE_OLD, MAYBE_NEW, DEF_NEW])
             if checkResp:
                 earlyResp = checkResp[0]
                 earlyLatency = timer.getTime()
@@ -144,7 +150,7 @@ def runTrial(blockImgs):
         resp = None
         latency = None
         while timer.getTime() <= 2:
-            checkResp = event.getKeys(keyList=['1','2','3','4','q'])
+            checkResp = event.getKeys(keyList=[DEF_OLD, MAYBE_OLD, MAYBE_NEW, DEF_NEW,'q'])
             if checkResp:
                 if 'q' in checkResp:
                     dataFile.close()
@@ -156,16 +162,18 @@ def runTrial(blockImgs):
         lateLatency = None
         timer = core.Clock()
         while timer.getTime() <= 1:
-            checkResp = event.getKeys(keyList=['1','2','3','4'])
+            checkResp = event.getKeys(keyList=[DEF_OLD, MAYBE_OLD, MAYBE_NEW, DEF_NEW])
             if checkResp:
                 lateResp = checkResp[0]
                 lateLatency = timer.getTime()
         possResponses = [earlyResp, resp, lateResp]
         dataWriter.writerow([i, imgFile[6:], earlyResp, earlyLatency, resp, latency, lateResp, lateLatency])
-    breakInstr = visual.TextStim(win, text="Now we will take a short break for 5 seconds.", color=(-1,-1,-1), alignText='center')
-    breakInstr.draw()
-    win.flip()
-    core.wait(5)
+    if showBreak:
+        breakInstr = visual.TextStim(win, text="Now we will take a short break for 5 seconds.", 
+            color=(-1,-1,-1), alignText='center')
+        breakInstr.draw()
+        win.flip()
+        core.wait(5)
 
 for blk in range(len(blockOrder)):
     blockImgs = getImages(blockOrder[blk])
@@ -174,7 +182,7 @@ for blk in range(len(blockOrder)):
     roundBegins.draw()
     win.flip()
     core.wait(2)
-    runTrial(blockImgs)
+    runTrial(blockImgs, (blk == len(blockOrder) - 1))
 
 endScreen = visual.TextStim(win, text=
     """You have completed the study!
@@ -186,20 +194,13 @@ win.flip()
 event.waitKeys()
 
 dataFile.close()
+
 ## ANALYSIS
 
 data = pd.read_csv(filename)
 
-
-# In[68]:
-
-
 def get_responses(data):
     return data[['img', 'earlyResp', 'resp', 'lateResp']]
-
-
-# In[69]:
-
 
 def fill_row(row):
     if np.isnan(row['resp']):
@@ -211,94 +212,37 @@ def fill_row(row):
             return -1
     return row['resp']
 
-
-# In[70]:
-
-
 def clear_blanks(tbl):
     tbl['resp'] = tbl.apply(fill_row, axis=1)
     return tbl[tbl['resp'] != -1][['img', 'resp']]
 
-
-# In[86]:
-
-
 valid_resp = clear_blanks(get_responses(data))
-
-
-# In[87]:
-
 
 def score_correctness(row):
     if 'a' in row['img']:
-        if row['resp'] == 4 or row['resp'] == 3:
+        if row['resp'] == DEF_OLD or row['resp'] == MAYBE_OLD:
             return 1
-        elif row['resp'] == 1 or row['resp'] == 2:
+        elif row['resp'] == DEF_NEW or row['resp'] == MAYBE_NEW:
             return 0
     elif 'b' in row['img'] or 'foil' in row['img']:
-        if row['resp'] == 4 or row['resp'] == 3:
+        if row['resp'] == DEF_OLD or row['resp'] == MAYBE_OLD:
             return 0
-        elif row['resp'] == 1 or row['resp'] == 2:
+        elif row['resp'] == DEF_NEW or row['resp'] == MAYBE_NEW:
             return 1
 
-
-# In[88]:
-
-
 def score_confidence(row):
-    if row['resp'] == 1 or row['resp'] == 4:
+    if row['resp'] == DEF_NEW or row['resp'] == DEF_OLD:
         return 1
     else:
         return 0
 
-
-# In[89]:
-
-
 valid_resp['correctness'] = valid_resp.apply(score_correctness, axis=1)
 
-
-# In[90]:
-
-
-valid_resp
-
-
-# In[91]:
-
-
-valid_resp['confidence'] = valid_resp.apply(score_confidence, axis = 1)
-valid_resp
-
-
-# In[92]:
-
+valid_resp['confidence'] = valid_resp.apply(score_confidence, axis=1)
 
 lures = valid_resp[valid_resp['img'].str.contains('b')]
 targets = valid_resp[valid_resp['img'].str.contains('a')]
 novels = valid_resp[valid_resp['img'].str.contains('foil')]
-
-
-# In[108]:
-
-
-lures
-
-
-# In[109]:
-
-
-targets
-
-
-# In[95]:
-
-
-novels
-
-
-# In[96]:
-
 
 output = {'total': np.zeros(6), 
          'percent': np.zeros(6),
@@ -309,11 +253,6 @@ output = {'total': np.zeros(6),
 output_tbl = pd.DataFrame(output, index=["lure_hit", "lure_miss",
                                         "target_hit", "target_miss",
                                         "novel_hit", "novel_miss"])
-output_tbl
-
-
-# In[116]:
-
 
 def compute_rows(tbl):
     """Returns a 2-item list RES of hit/miss data for a lure, target, or novel table.
@@ -344,17 +283,9 @@ def compute_rows(tbl):
     return [[num_hits, pct_hits, num_hc_hit, num_lc_hit, pct_hc_hit, pct_lc_hit], 
            [num_misses, pct_misses, num_hc_miss, num_lc_miss, pct_hc_miss, pct_lc_miss]]
 
-
-# In[117]:
-
-
 lure_res = compute_rows(lures)
 target_res = compute_rows(targets)
 novel_res = compute_rows(novels)
-
-
-# In[123]:
-
 
 output_tbl.loc['lure_hit'] = lure_res[0]
 output_tbl.loc['lure_miss'] = lure_res[1]
@@ -362,9 +293,6 @@ output_tbl.loc['target_hit'] = target_res[0]
 output_tbl.loc['target_miss'] = target_res[1]
 output_tbl.loc['novel_hit'] = novel_res[0]
 output_tbl.loc['novel_miss'] = novel_res[1]
-
-
-# In[124]:
 
 output_tbl.to_csv(filename[:-8] + 'RESULTS.csv')
 

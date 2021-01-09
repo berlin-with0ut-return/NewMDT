@@ -36,7 +36,8 @@ dataWriter = csv.writer(dataFile, delimiter=',')
 dataWriter.writerow(['trial', 'img', 'earlyResp', 'earlyLatency', 'resp', 'latency', 'lateResp', 'lateLatency'])
 
 # INTRO
-win = visual.Window([800,600], monitor="testMonitor", units="pix", color= (1,1,1))
+win = visual.Window([800,600], monitor="testMonitor", units="pix", color= (1,1,1), 
+    fullscr=True)
 intro = visual.TextStim(win, text=
 """Welcome to the second section. Please press any key when you are ready to begin.
 """,
