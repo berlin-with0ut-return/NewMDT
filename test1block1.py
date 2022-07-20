@@ -176,7 +176,7 @@ def runTrial(blockImgs, showBreak):
         core.wait(5)
 
 for blk in range(len(blockOrder)):
-    blockImgs = getImages(blockOrder[blk])
+    blockImgs = getImages(blockOrder[blk])[:1]
     random.shuffle(blockImgs)
     roundBegins = visual.TextStim(win, text="Round {0}".format(blk + 1), color=(-1,-1,-1))
     roundBegins.draw()
@@ -203,10 +203,10 @@ def get_responses(data):
     return data[['img', 'earlyResp', 'resp', 'lateResp']]
 
 def fill_row(row):
-    if np.isnan(row['resp']):
-        if not np.isnan(row['lateResp']):
+    if not row['resp']:
+        if row['lateResp']:
             return row['lateResp']
-        elif not np.isnan(row['earlyResp']):
+        elif row['earlyResp']:
             return row['earlyResp']
         else:
             return -1
@@ -266,10 +266,9 @@ def compute_rows(tbl):
     # counts
     num_hits = len(hits.index)
     num_misses = len(misses.index)
-    print(num_hits, num_misses)
     # percentages
-    pct_hits = num_hits/(num_hits + num_misses)
-    pct_misses = num_misses/(num_hits + num_misses)
+    pct_hits = num_hits/(num_hits + num_misses) if num_hits + num_misses else None
+    pct_misses = num_misses/(num_hits + num_misses) if num_hits + num_misses else None
     # confidence counts
     num_hc_hit = sum(hits['confidence'])
     num_lc_hit = num_hits - num_hc_hit
